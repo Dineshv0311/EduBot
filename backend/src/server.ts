@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import pg from 'pg';
+import authRoutes from './routes/auth.routes.js';
 
 dotenv.config();
 
@@ -16,6 +17,10 @@ export const pool = new pg.Pool({
   ssl: { rejectUnauthorized: false }
 });
 
+// Process 1.0 Auth Routes
+app.use('/api/auth', authRoutes);
+
+// Health check endpoint
 app.get('/api/health', async (_req: Request, res: Response) => {
   try {
     const result = await pool.query('SELECT NOW()');
