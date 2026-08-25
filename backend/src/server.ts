@@ -7,6 +7,7 @@ import codingRoutes from './routes/coding.routes.js';
 import resumeRoutes from './routes/resume.routes.js';
 import interviewRoutes from './routes/interview.routes.js';
 import aptitudeRoutes from './routes/aptitude.routes.js';
+import dashboardRoutes from './routes/dashboard.routes.js';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use('/api/coding-activity', codingRoutes);
 app.use('/api/resume', resumeRoutes);
 app.use('/api/mock-interview', interviewRoutes);
 app.use('/api/aptitude', aptitudeRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Health check endpoint
 app.get('/api/health', async (_req: Request, res: Response) => {
