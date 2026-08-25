@@ -6,9 +6,14 @@ dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 
+// Enable SSL only for remote cloud databases (RDS, Supabase), disabled for local Docker
+const isRemoteDb = 
+  process.env.DATABASE_URL?.includes('rds.amazonaws.com') ||
+  process.env.DATABASE_URL?.includes('supabase.co');
+
 export const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: isRemoteDb ? { rejectUnauthorized: false } : false
 });
 
 app.listen(PORT, () => {
