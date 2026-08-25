@@ -65,10 +65,10 @@ export default function CodingTracker(): React.JSX.Element {
     try {
       setError(null);
       const [actsRes, statsRes] = await Promise.all([
-        fetch('http://localhost:5000/api/coding-activity', {
+        fetch('http://16.171.135.67/api/coding-activity', {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        fetch('http://localhost:5000/api/coding-activity/stats', {
+        fetch('http://16.171.135.67/api/coding-activity/stats', {
           headers: { Authorization: `Bearer ${token}` }
         })
       ]);
@@ -99,7 +99,7 @@ export default function CodingTracker(): React.JSX.Element {
 
     setSubmitting(true);
     try {
-      const res = await fetch('http://localhost:5000/api/coding-activity', {
+      const res = await fetch('http://16.171.135.67/api/coding-activity', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { LogIn, AlertCircle, Loader2 } from 'lucide-react';
+import API_BASE_URL from '../services/api';
 
 export default function Login(): React.JSX.Element {
   const [email, setEmail] = useState('');
@@ -18,7 +19,7 @@ export default function Login(): React.JSX.Element {
     setIsAuthenticating(true);
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/login', {
+      const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
