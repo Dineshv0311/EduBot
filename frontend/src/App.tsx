@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import CodingTracker from './pages/CodingTracker';
+import ResumeBuilder from './pages/ResumeBuilder';
 
 export default function App(): React.JSX.Element {
   return (
@@ -21,6 +22,7 @@ export default function App(): React.JSX.Element {
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/coding" element={<CodingTracker />} />
+            <Route path="/resume" element={<ResumeBuilder />} />
           </Route>
 
           {/* Admin Protected Routes */}

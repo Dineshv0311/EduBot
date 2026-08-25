@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import pg from 'pg';
 import authRoutes from './routes/auth.routes.js';
 import codingRoutes from './routes/coding.routes.js';
+import resumeRoutes from './routes/resume.routes.js';
 
 dotenv.config();
 
@@ -18,11 +19,10 @@ export const pool = new pg.Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-// Process 1.0 Auth Routes
+// Process Routes
 app.use('/api/auth', authRoutes);
-
-// Process 2.0 Coding Practice Tracker Routes
 app.use('/api/coding-activity', codingRoutes);
+app.use('/api/resume', resumeRoutes);
 
 // Health check endpoint
 app.get('/api/health', async (_req: Request, res: Response) => {

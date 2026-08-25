@@ -48,7 +48,7 @@ export default function Dashboard(): React.JSX.Element {
 
         {/* Module Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Module 1: Coding Practice Tracker (ACTIVE) */}
+          {/* Module 1: Coding Practice Tracker */}
           <Link
             to="/coding"
             className="p-6 bg-white rounded-xl border border-indigo-200 shadow-sm hover:border-indigo-600 hover:shadow-md transition flex flex-col justify-between group"
@@ -66,14 +66,23 @@ export default function Dashboard(): React.JSX.Element {
             </div>
           </Link>
 
-          {/* Module 2: Resume Builder */}
-          <div className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm opacity-80">
-            <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
-              <FileText className="w-5 h-5" />
+          {/* Module 2: Resume Builder (ACTIVE) */}
+          <Link
+            to="/resume"
+            className="p-6 bg-white rounded-xl border border-emerald-200 shadow-sm hover:border-emerald-600 hover:shadow-md transition flex flex-col justify-between group"
+          >
+            <div>
+              <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <FileText className="w-5 h-5" />
+              </div>
+              <h3 className="font-semibold text-slate-900">Resume Builder</h3>
+              <p className="text-xs text-slate-500 mt-1">Live editor with 60s auto-save & PDF export</p>
             </div>
-            <h3 className="font-semibold text-slate-900">Resume Builder</h3>
-            <p className="text-xs text-slate-500 mt-1">Live editor with 60s auto-save & PDF export (Step 5)</p>
-          </div>
+            <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-emerald-600">
+              <span>Open Module</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
 
           {/* Module 3: Mock Interview & Aptitude */}
           <div className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm opacity-80">
