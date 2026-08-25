@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import CodingTracker from './pages/CodingTracker';
 import ResumeBuilder from './pages/ResumeBuilder';
+import PracticeHub from './pages/PracticeHub';
 
 export default function App(): React.JSX.Element {
   return (
@@ -23,6 +24,7 @@ export default function App(): React.JSX.Element {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/coding" element={<CodingTracker />} />
             <Route path="/resume" element={<ResumeBuilder />} />
+            <Route path="/practice" element={<PracticeHub />} />
           </Route>
 
           {/* Admin Protected Routes */}

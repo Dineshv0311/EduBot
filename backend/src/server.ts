@@ -5,6 +5,8 @@ import pg from 'pg';
 import authRoutes from './routes/auth.routes.js';
 import codingRoutes from './routes/coding.routes.js';
 import resumeRoutes from './routes/resume.routes.js';
+import interviewRoutes from './routes/interview.routes.js';
+import aptitudeRoutes from './routes/aptitude.routes.js';
 
 dotenv.config();
 
@@ -23,6 +25,8 @@ export const pool = new pg.Pool({
 app.use('/api/auth', authRoutes);
 app.use('/api/coding-activity', codingRoutes);
 app.use('/api/resume', resumeRoutes);
+app.use('/api/mock-interview', interviewRoutes);
+app.use('/api/aptitude', aptitudeRoutes);
 
 // Health check endpoint
 app.get('/api/health', async (_req: Request, res: Response) => {
