@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LogOut, User as UserIcon, Code2, FileText, Compass, BarChart2 } from 'lucide-react';
+import { LogOut, User as UserIcon, Code2, FileText, Compass, BarChart2, ArrowRight } from 'lucide-react';
 
 export default function Dashboard(): React.JSX.Element {
   const { user, logout } = useAuth();
@@ -45,17 +46,28 @@ export default function Dashboard(): React.JSX.Element {
           </p>
         </div>
 
-        {/* Module Grid Preview */}
+        {/* Module Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm hover:border-indigo-400 transition">
-            <div className="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4">
-              <Code2 className="w-5 h-5" />
+          {/* Module 1: Coding Practice Tracker (ACTIVE) */}
+          <Link
+            to="/coding"
+            className="p-6 bg-white rounded-xl border border-indigo-200 shadow-sm hover:border-indigo-600 hover:shadow-md transition flex flex-col justify-between group"
+          >
+            <div>
+              <div className="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Code2 className="w-5 h-5" />
+              </div>
+              <h3 className="font-semibold text-slate-900">Coding Practice Tracker</h3>
+              <p className="text-xs text-slate-500 mt-1">Log problems, view streak & topic summary</p>
             </div>
-            <h3 className="font-semibold text-slate-900">Coding Practice Tracker</h3>
-            <p className="text-xs text-slate-500 mt-1">Log problems, view streak & topic summary (Step 4)</p>
-          </div>
+            <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-indigo-600">
+              <span>Open Module</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
 
-          <div className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm hover:border-indigo-400 transition">
+          {/* Module 2: Resume Builder */}
+          <div className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm opacity-80">
             <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
               <FileText className="w-5 h-5" />
             </div>
@@ -63,7 +75,8 @@ export default function Dashboard(): React.JSX.Element {
             <p className="text-xs text-slate-500 mt-1">Live editor with 60s auto-save & PDF export (Step 5)</p>
           </div>
 
-          <div className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm hover:border-indigo-400 transition">
+          {/* Module 3: Mock Interview & Aptitude */}
+          <div className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm opacity-80">
             <div className="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center mb-4">
               <Compass className="w-5 h-5" />
             </div>
@@ -71,7 +84,8 @@ export default function Dashboard(): React.JSX.Element {
             <p className="text-xs text-slate-500 mt-1">Timed assessments & company interview prep (Step 6)</p>
           </div>
 
-          <div className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm hover:border-indigo-400 transition">
+          {/* Module 4: Recommendations & Analytics */}
+          <div className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm opacity-80">
             <div className="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center mb-4">
               <BarChart2 className="w-5 h-5" />
             </div>
