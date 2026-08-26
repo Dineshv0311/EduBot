@@ -1,0 +1,59 @@
+name: Deploy Backend to AWS ECR & EC2
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-deploy.yml'
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, Tag, and Push Image to ECR
+        env:
+          ECR_REGISTRY: 937206802465.dkr.ecr.eu-north-1.amazonaws.com
+          ECR_REPOSITORY: edubot-backend
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./backend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Deploy Container to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 16.171.135.67
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            aws ecr get-login-password --region eu-north-1 | sudo docker login --username AWS --password-stdin 937206802465.dkr.ecr.eu-north-1.amazonaws.com
+            sudo docker pull 937206802465.dkr.ecr.eu-north-1.amazonaws.com/edubot-backend:latest
+            sudo docker stop edubot-api || true
+            sudo docker rm edubot-api || true
+            sudo docker run -d \
+              --name edubot-api \
+              --restart always \
+              -p 80:5000 \
+              -e PORT=5000 \
+              -e DATABASE_URL="postgresql://postgres:Crushboy_13_@edubot-db.cdsgw0qi26h5.eu-north-1.rds.amazonaws.com:5432/edubot" \
+              -e JWT_SECRET="supersecretjwtkey_edubot_production_2026" \
+              -e NODE_ENV="production" \
+              -e CORS_ORIGIN="*" \
+              937206802465.dkr.ecr.eu-north-1.amazonaws.com/edubot-backend:latest
