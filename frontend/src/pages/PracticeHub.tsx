@@ -90,10 +90,10 @@ export default function PracticeHub(): React.JSX.Element {
     setError(null);
     try {
       const [compRes, testsRes] = await Promise.all([
-        fetch('http://16.171.135.67/api/mock-interview/companies', {
+        fetch('http://13.51.54.37/api/mock-interview/companies', {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        fetch('http://16.171.135.67/api/aptitude/tests', {
+        fetch('http://13.51.54.37/api/aptitude/tests', {
           headers: { Authorization: `Bearer ${token}` }
         })
       ]);
@@ -113,10 +113,10 @@ export default function PracticeHub(): React.JSX.Element {
   const loadHistory = async () => {
     try {
       const [iRes, aRes] = await Promise.all([
-        fetch('http://16.171.135.67/api/mock-interview/history', {
+        fetch('http://13.51.54.37/api/mock-interview/history', {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        fetch('http://16.171.135.67/api/aptitude/history', {
+        fetch('http://13.51.54.37/api/aptitude/history', {
           headers: { Authorization: `Bearer ${token}` }
         })
       ]);
@@ -144,10 +144,10 @@ export default function PracticeHub(): React.JSX.Element {
     setLoading(true);
     try {
       const [qRes, startRes] = await Promise.all([
-        fetch(`http://16.171.135.67/api/mock-interview/questions/${company.company_id}`, {
+        fetch(`http://13.51.54.37/api/mock-interview/questions/${company.company_id}`, {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        fetch('http://16.171.135.67/api/mock-interview/attempt/start', {
+        fetch('http://13.51.54.37/api/mock-interview/attempt/start', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -181,7 +181,7 @@ export default function PracticeHub(): React.JSX.Element {
         answer_text: interviewAnswers[q.question_id] || ''
       }));
 
-      const res = await fetch(`http://16.171.135.67/api/mock-interview/attempt/${interviewAttemptId}/submit`, {
+      const res = await fetch(`http://13.51.54.37/api/mock-interview/attempt/${interviewAttemptId}/submit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -208,10 +208,10 @@ export default function PracticeHub(): React.JSX.Element {
     setLoading(true);
     try {
       const [testDetailsRes, startRes] = await Promise.all([
-        fetch(`http://16.171.135.67/api/aptitude/test/${test.test_id}`, {
+        fetch(`http://13.51.54.37/api/aptitude/test/${test.test_id}`, {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        fetch('http://16.171.135.67/api/aptitude/attempt/start', {
+        fetch('http://13.51.54.37/api/aptitude/attempt/start', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -249,7 +249,7 @@ export default function PracticeHub(): React.JSX.Element {
         selected_option: selectedOptions[q.question_id] || null
       }));
 
-      const res = await fetch(`http://16.171.135.67/api/aptitude/attempt/${aptitudeAttemptId}/submit`, {
+      const res = await fetch(`http://13.51.54.37/api/aptitude/attempt/${aptitudeAttemptId}/submit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

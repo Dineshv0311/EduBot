@@ -48,7 +48,7 @@ export default function ResumeBuilder(): React.JSX.Element {
   useEffect(() => {
     const fetchResume = async () => {
       try {
-        const res = await fetch('http://16.171.135.67/api/resume', {
+        const res = await fetch('http://13.51.54.37/api/resume', {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) {
@@ -87,7 +87,7 @@ export default function ResumeBuilder(): React.JSX.Element {
 
     setSaveStatus('Saving');
     try {
-      const res = await fetch('http://16.171.135.67/api/resume', {
+      const res = await fetch('http://13.51.54.37/api/resume', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
