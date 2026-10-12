@@ -50,6 +50,19 @@ Style Guidelines:
 export function getLocalFallbackReply(message: string, studentName?: string): string {
   const query = message.toLowerCase();
 
+  if (query.includes('name') || query.includes('mame') || query.includes('who are you') || query.includes('what are you')) {
+    return `### 🤖 I am EduBot Helper!
+I am your dedicated **AI Placement & Portal Assistant** inside EduBot AI.
+
+I can help you with:
+- **🏢 Company Placement Prep:** Interview expectations for *TechCorp Labs*, *FinTech Solutions*, etc.
+- **💻 Coding Tracker:** Logging DSA problems and building consistency.
+- **📄 Resume Builder:** Boosting your ATS score and generating clean PDFs.
+- **🎯 Practice Hub:** Taking company mock interviews and timed aptitude assessments.
+
+*(💡 To enable open-ended dynamic Gemini answers for any custom question, click the **🔑 Key button** at the top right of this chat and save your Gemini API key!)*`;
+  }
+
   if (query.includes('techcorp') || (query.includes('tech') && query.includes('corp'))) {
     return `### 🏢 TechCorp Labs — Placement & Interview Guide
 
@@ -193,8 +206,8 @@ export async function askAiHelper(
 
       if (res.ok) {
         const data = await res.json();
-        if (data.reply) {
-          return { reply: data.reply, source: data.source || 'gemini' };
+        if (data.reply && data.source === 'gemini') {
+          return { reply: data.reply, source: 'gemini' };
         }
       }
     } catch {
