@@ -10,6 +10,7 @@ import {
   BookOpen,
   Loader2
 } from 'lucide-react';
+import API_BASE_URL from '../services/api';
 
 interface Activity {
   activity_id: number;
@@ -65,10 +66,10 @@ export default function CodingTracker(): React.JSX.Element {
     try {
       setError(null);
       const [actsRes, statsRes] = await Promise.all([
-        fetch('http://13.51.54.37/api/coding-activity', {
+        fetch(`${API_BASE_URL}/coding-activity`, {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        fetch('http://13.51.54.37/api/coding-activity/stats', {
+        fetch(`${API_BASE_URL}/coding-activity/stats`, {
           headers: { Authorization: `Bearer ${token}` }
         })
       ]);
@@ -99,7 +100,7 @@ export default function CodingTracker(): React.JSX.Element {
 
     setSubmitting(true);
     try {
-      const res = await fetch('http://13.51.54.37/api/coding-activity', {
+      const res = await fetch(`${API_BASE_URL}/coding-activity`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

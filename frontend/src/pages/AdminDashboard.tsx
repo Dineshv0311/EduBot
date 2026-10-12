@@ -10,6 +10,7 @@ import {
   AlertCircle,
   Loader2,
 } from 'lucide-react';
+import API_BASE_URL from '../services/api';
 
 export default function AdminDashboard(): React.JSX.Element {
   const { user, token, logout } = useAuth();
@@ -56,9 +57,9 @@ export default function AdminDashboard(): React.JSX.Element {
     setError(null);
     try {
       const [compRes, iqRes, aptRes] = await Promise.all([
-        fetch('http://13.51.54.37/api/admin/companies', { headers: { Authorization: `Bearer ${token}` } }),
-        fetch('http://13.51.54.37/api/admin/interview-questions', { headers: { Authorization: `Bearer ${token}` } }),
-        fetch('http://13.51.54.37/api/admin/aptitude-tests', { headers: { Authorization: `Bearer ${token}` } })
+        fetch(`${API_BASE_URL}/admin/companies`, { headers: { Authorization: `Bearer ${token}` } }),
+        fetch(`${API_BASE_URL}/admin/interview-questions`, { headers: { Authorization: `Bearer ${token}` } }),
+        fetch(`${API_BASE_URL}/admin/aptitude-tests`, { headers: { Authorization: `Bearer ${token}` } })
       ]);
 
       const compData = await compRes.json();
@@ -83,7 +84,7 @@ export default function AdminDashboard(): React.JSX.Element {
   const handleCreateCompany = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://13.51.54.37/api/admin/companies', {
+      const res = await fetch(`${API_BASE_URL}/admin/companies`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ company_name: compName, industry: compIndustry, description: compDesc, website: compWebsite })
@@ -103,7 +104,7 @@ export default function AdminDashboard(): React.JSX.Element {
   const handleDeleteCompany = async (id: number) => {
     if (!window.confirm('Delete this company and its associated interview questions?')) return;
     try {
-      const res = await fetch(`http://13.51.54.37/api/admin/companies/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/admin/companies/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -117,7 +118,7 @@ export default function AdminDashboard(): React.JSX.Element {
   const handleCreateIQ = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://13.51.54.37/api/admin/interview-questions', {
+      const res = await fetch(`${API_BASE_URL}/admin/interview-questions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
@@ -138,7 +139,7 @@ export default function AdminDashboard(): React.JSX.Element {
 
   const handleDeleteIQ = async (id: number) => {
     try {
-      const res = await fetch(`http://13.51.54.37/api/admin/interview-questions/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/admin/interview-questions/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -152,7 +153,7 @@ export default function AdminDashboard(): React.JSX.Element {
   const handleCreateTest = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://13.51.54.37/api/admin/aptitude-tests', {
+      const res = await fetch(`${API_BASE_URL}/admin/aptitude-tests`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
@@ -175,7 +176,7 @@ export default function AdminDashboard(): React.JSX.Element {
   const handleDeleteTest = async (id: number) => {
     if (!window.confirm('Delete this test and all its questions?')) return;
     try {
-      const res = await fetch(`http://13.51.54.37/api/admin/aptitude-tests/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/admin/aptitude-tests/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -192,7 +193,7 @@ export default function AdminDashboard(): React.JSX.Element {
   const loadTestQuestions = async (test: any) => {
     setSelectedTestForQuestions(test);
     try {
-      const res = await fetch(`http://13.51.54.37/api/admin/aptitude-questions/${test.test_id}`, {
+      const res = await fetch(`${API_BASE_URL}/admin/aptitude-questions/${test.test_id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -207,7 +208,7 @@ export default function AdminDashboard(): React.JSX.Element {
     if (!selectedTestForQuestions) return;
 
     try {
-      const res = await fetch('http://13.51.54.37/api/admin/aptitude-questions', {
+      const res = await fetch(`${API_BASE_URL}/admin/aptitude-questions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
@@ -237,7 +238,7 @@ export default function AdminDashboard(): React.JSX.Element {
 
   const handleDeleteAQ = async (id: number) => {
     try {
-      const res = await fetch(`http://13.51.54.37/api/admin/aptitude-questions/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/admin/aptitude-questions/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });

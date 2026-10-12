@@ -12,6 +12,7 @@ import {
   AlertTriangle,
   Loader2
 } from 'lucide-react';
+import API_BASE_URL from '../services/api';
 
 interface Project {
   project_id?: number;
@@ -48,7 +49,7 @@ export default function ResumeBuilder(): React.JSX.Element {
   useEffect(() => {
     const fetchResume = async () => {
       try {
-        const res = await fetch('http://13.51.54.37/api/resume', {
+        const res = await fetch(`${API_BASE_URL}/resume`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) {
@@ -87,7 +88,7 @@ export default function ResumeBuilder(): React.JSX.Element {
 
     setSaveStatus('Saving');
     try {
-      const res = await fetch('http://13.51.54.37/api/resume', {
+      const res = await fetch(`${API_BASE_URL}/resume`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -8,6 +8,7 @@ import interviewRoutes from './routes/interview.routes.js';
 import aptitudeRoutes from './routes/aptitude.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+import helperRoutes from './routes/helper.routes.js';
 
 dotenv.config();
 
@@ -24,6 +25,15 @@ app.use('/api/mock-interview', interviewRoutes);
 app.use('/api/aptitude', aptitudeRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/helper', helperRoutes);
+
+app.get('/', (_req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'EduBot AI API Server is running',
+    version: '1.0.0'
+  });
+});
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });

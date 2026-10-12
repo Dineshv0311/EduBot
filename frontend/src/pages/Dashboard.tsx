@@ -12,6 +12,7 @@ import {
   Target,
   Loader2
 } from 'lucide-react';
+import API_BASE_URL from '../services/api';
 
 interface Recommendation {
   recommendation_id: number;
@@ -47,7 +48,7 @@ export default function Dashboard(): React.JSX.Element {
 
   const fetchDashboardData = async () => {
     try {
-      const res = await fetch('http://13.51.54.37/api/dashboard/summary', {
+      const res = await fetch(`${API_BASE_URL}/dashboard/summary`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!res.ok) throw new Error('Failed to load dashboard metrics.');
@@ -66,7 +67,7 @@ export default function Dashboard(): React.JSX.Element {
 
   const dismissRecommendation = async (id: number) => {
     try {
-      const res = await fetch(`http://13.51.54.37/api/dashboard/recommendation/${id}/dismiss`, {
+      const res = await fetch(`${API_BASE_URL}/dashboard/recommendation/${id}/dismiss`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}` }
       });
