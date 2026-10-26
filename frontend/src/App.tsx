@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import CodingTracker from './pages/CodingTracker';
+import CodingWorkspace from './pages/CodingWorkspace';
 import ResumeBuilder from './pages/ResumeBuilder';
 import PracticeHub from './pages/PracticeHub';
 
@@ -28,6 +29,8 @@ export default function App(): React.JSX.Element {
               <Route path="/resume" element={<ResumeBuilder />} />
               <Route path="/practice" element={<PracticeHub />} />
             </Route>
+            {/* Dedicated In-Built Coding IDE Workspace */}
+            <Route path="/coding/:idOrSlug" element={<CodingWorkspace />} />
           </Route>
 
           {/* Admin Protected Routes (State: Admin Only) */}

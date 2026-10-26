@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes.js';
 import codingRoutes from './routes/coding.routes.js';
+import codingProblemsRoutes from './routes/codingProblems.routes.js';
 import resumeRoutes from './routes/resume.routes.js';
 import interviewRoutes from './routes/interview.routes.js';
 import aptitudeRoutes from './routes/aptitude.routes.js';
@@ -20,6 +21,7 @@ app.use(express.json());
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/coding-activity', codingRoutes);
+app.use('/api/coding-problems', codingProblemsRoutes);
 app.use('/api/resume', resumeRoutes);
 app.use('/api/mock-interview', interviewRoutes);
 app.use('/api/aptitude', aptitudeRoutes);

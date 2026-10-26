@@ -166,3 +166,74 @@ CREATE TABLE recommendation (
     generated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(50) DEFAULT 'Active' CHECK (status IN ('Active', 'Dismissed', 'Completed'))
 );
+
+
+-- 16. CODING_PROBLEM
+CREATE TABLE coding_problem (
+    problem_id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT NOT NULL,
+    difficulty VARCHAR(50) DEFAULT 'Medium' CHECK (difficulty IN ('Easy', 'Medium', 'Hard')),
+    topic VARCHAR(100) NOT NULL,
+    input_format TEXT,
+    output_format TEXT,
+    constraints TEXT,
+    example_input TEXT,
+    example_output TEXT,
+    example_explanation TEXT,
+    supported_languages TEXT[] DEFAULT ARRAY['python'],
+    starter_code JSONB DEFAULT '{"python": "import sys\n\ndef solve():\n    input_data = sys.stdin.read().split()\n    if not input_data:\n        return\n    pass\n\nif __name__ == \"__main__\":\n    solve()\n"}'::jsonb,
+    time_limit_ms INT DEFAULT 3000,
+    memory_limit_kb INT DEFAULT 128000,
+    status VARCHAR(50) DEFAULT 'Published' CHECK (status IN ('Draft', 'Published', 'Archived')),
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 17. CODING_TEST_CASE
+CREATE TABLE coding_test_case (
+    test_case_id SERIAL PRIMARY KEY,
+    problem_id INT NOT NULL REFERENCES coding_problem(problem_id) ON DELETE CASCADE,
+    input TEXT NOT NULL,
+    expected_output TEXT NOT NULL,
+    is_sample BOOLEAN DEFAULT FALSE,
+    description VARCHAR(255),
+    order_index INT DEFAULT 0,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 18. CODING_SUBMISSION
+CREATE TABLE coding_submission (
+    submission_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    problem_id INT NOT NULL REFERENCES coding_problem(problem_id) ON DELETE CASCADE,
+    source_code TEXT NOT NULL,
+    language VARCHAR(50) NOT NULL DEFAULT 'python',
+    verdict VARCHAR(50) NOT NULL,
+    passed_count INT DEFAULT 0,
+    total_count INT DEFAULT 0,
+    execution_time NUMERIC(8, 3) DEFAULT 0,
+    memory_used INT DEFAULT 0,
+    error_message TEXT,
+    submitted_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 19. CODING_SUBMISSION_CASE
+CREATE TABLE coding_submission_case (
+    id SERIAL PRIMARY KEY,
+    submission_id INT NOT NULL REFERENCES coding_submission(submission_id) ON DELETE CASCADE,
+    test_case_id INT NOT NULL REFERENCES coding_test_case(test_case_id) ON DELETE CASCADE,
+    status VARCHAR(50) NOT NULL,
+    actual_output TEXT,
+    execution_time NUMERIC(8, 3),
+    memory_used INT,
+    error_output TEXT
+);
+
+CREATE INDEX idx_coding_problem_status ON coding_problem(status);
+CREATE INDEX idx_coding_problem_slug ON coding_problem(slug);
+CREATE INDEX idx_coding_test_case_problem ON coding_test_case(problem_id);
+CREATE INDEX idx_coding_submission_user ON coding_submission(user_id);
+CREATE INDEX idx_coding_submission_problem ON coding_submission(problem_id);
