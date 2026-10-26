@@ -218,7 +218,7 @@ export default function Dashboard(): React.JSX.Element {
           Placement Modules
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <Link
             to="/coding"
             className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm hover:border-indigo-600 hover:shadow-md transition flex flex-col justify-between group"
@@ -261,6 +261,29 @@ export default function Dashboard(): React.JSX.Element {
             </div>
             <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-emerald-600">
               <span>Edit Resume</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+
+          <Link
+            to="/resume-analyzer"
+            className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm hover:border-purple-600 hover:shadow-md transition flex flex-col justify-between group"
+          >
+            <div>
+              <div className="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-slate-900 text-base">Resume Analyzer & ATS</h3>
+              <p className="text-xs text-slate-500 mt-1">
+                Screen existing resumes against target roles with ATS match scoring.
+              </p>
+              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                <span>ATS Pre-Check</span>
+                <span className="text-purple-600 font-semibold">Job Match</span>
+              </div>
+            </div>
+            <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-purple-600">
+              <span>Analyze Resume</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>

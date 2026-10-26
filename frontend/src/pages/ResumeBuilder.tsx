@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 // @ts-ignore
 import html2pdf from 'html2pdf.js';
@@ -10,7 +11,9 @@ import {
   Clock, 
   CheckCircle, 
   AlertTriangle,
-  Loader2
+  Loader2,
+  Sparkles,
+  X
 } from 'lucide-react';
 import API_BASE_URL from '../services/api';
 
@@ -30,10 +33,17 @@ interface Skill {
 
 export default function ResumeBuilder(): React.JSX.Element {
   const { token, user } = useAuth();
+  const location = useLocation();
 
   const [summary, setSummary] = useState('');
   const [projects, setProjects] = useState<Project[]>([]);
   const [skills, setSkills] = useState<Skill[]>([]);
+
+  // Suggested additions from Resume Analyzer handoff
+  const [suggestedSkills, setSuggestedSkills] = useState<string[]>(
+    location.state?.suggestedSkills || []
+  );
+  const targetRole = location.state?.targetRole || null;
 
   const [loading, setLoading] = useState(true);
   const [saveStatus, setSaveStatus] = useState<'Saved' | 'Saving' | 'Invalid Data' | 'Unsaved'>('Saved');
@@ -156,6 +166,31 @@ export default function ResumeBuilder(): React.JSX.Element {
     setSkills(skills.filter((_, i) => i !== index));
   };
 
+  // Add a suggested skill from analyzer handoff
+  const acceptSuggestedSkill = (skillToAdd: string) => {
+    const existing = skills.some((s) => s.skill_name.toLowerCase() === skillToAdd.toLowerCase());
+    if (!existing) {
+      setSkills((prev) => [
+        ...prev,
+        { skill_name: skillToAdd, skill_category: 'Tools' }
+      ]);
+    }
+    setSuggestedSkills((prev) => prev.filter((s) => s !== skillToAdd));
+  };
+
+  const addAllSuggestedSkills = () => {
+    const newItems: Skill[] = [];
+    const currentSkillSet = new Set(skills.map((s) => s.skill_name.toLowerCase()));
+
+    for (const item of suggestedSkills) {
+      if (!currentSkillSet.has(item.toLowerCase())) {
+        newItems.push({ skill_name: item, skill_category: 'Tools' });
+      }
+    }
+    setSkills((prev) => [...prev, ...newItems]);
+    setSuggestedSkills([]);
+  };
+
   const handleExportPdf = () => {
     if (!resumePreviewRef.current) return;
     setIsExporting(true);
@@ -171,11 +206,14 @@ export default function ResumeBuilder(): React.JSX.Element {
     };
 
     html2pdf()
-      .from(resumePreviewRef.current)
       .set(opt)
+      .from(resumePreviewRef.current)
       .save()
       .then(() => setIsExporting(false))
-      .catch(() => setIsExporting(false));
+      .catch((err: any) => {
+        console.error(err);
+        setIsExporting(false);
+      });
   };
 
   if (loading) {
@@ -183,7 +221,7 @@ export default function ResumeBuilder(): React.JSX.Element {
       <div className="min-h-[70vh] flex items-center justify-center">
         <div className="flex flex-col items-center gap-2">
           <Loader2 className="w-8 h-8 text-indigo-600 animate-spin" />
-          <p className="text-sm font-medium text-slate-600">Loading Resume Builder...</p>
+          <p className="text-sm font-medium text-slate-600">Loading Resume Data...</p>
         </div>
       </div>
     );
@@ -191,6 +229,49 @@ export default function ResumeBuilder(): React.JSX.Element {
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      {/* Resume Analyzer Integration Banner (if handoff state exists) */}
+      {suggestedSkills.length > 0 && (
+        <div className="p-4 rounded-xl bg-gradient-to-r from-purple-50 via-indigo-50 to-white border border-indigo-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-purple-600" />
+              <span className="text-xs font-bold text-slate-900">
+                ATS Analyzer Recommendations {targetRole ? `for ${targetRole}` : ''}
+              </span>
+            </div>
+            <p className="text-xs text-slate-600">
+              The analyzer found skills missing from your resume. Incorporate verified skills below to boost your ATS match score:
+            </p>
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {suggestedSkills.map((s) => (
+                <button
+                  key={s}
+                  onClick={() => acceptSuggestedSkill(s)}
+                  className="text-[11px] px-2 py-0.5 rounded bg-white text-indigo-700 font-semibold border border-indigo-200 hover:bg-indigo-100 transition flex items-center gap-1"
+                >
+                  <span>+ {s}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              onClick={addAllSuggestedSkills}
+              className="text-xs font-bold px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition"
+            >
+              Add All
+            </button>
+            <button
+              onClick={() => setSuggestedSkills([])}
+              className="p-1 rounded text-slate-400 hover:text-slate-600"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Action Bar */}
       <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-4">
         <div>
@@ -199,6 +280,14 @@ export default function ResumeBuilder(): React.JSX.Element {
         </div>
 
         <div className="flex items-center gap-3">
+          <Link
+            to="/resume-analyzer"
+            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 rounded-lg text-xs font-semibold transition"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>ATS Resume Pre-Check</span>
+          </Link>
+
           <div className="hidden sm:flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md bg-slate-50 border border-slate-200">
             {saveStatus === 'Saving' && (
               <span className="text-amber-600 flex items-center gap-1">

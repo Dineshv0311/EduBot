@@ -10,6 +10,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import CodingTracker from './pages/CodingTracker';
 import CodingWorkspace from './pages/CodingWorkspace';
 import ResumeBuilder from './pages/ResumeBuilder';
+import ResumeAnalyzer from './pages/ResumeAnalyzer';
 import PracticeHub from './pages/PracticeHub';
 
 export default function App(): React.JSX.Element {
@@ -27,6 +28,7 @@ export default function App(): React.JSX.Element {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/coding" element={<CodingTracker />} />
               <Route path="/resume" element={<ResumeBuilder />} />
+              <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
               <Route path="/practice" element={<PracticeHub />} />
             </Route>
             {/* Dedicated In-Built Coding IDE Workspace */}

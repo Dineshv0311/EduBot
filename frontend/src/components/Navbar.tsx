@@ -5,6 +5,7 @@ import {
   LayoutDashboard, 
   Code2, 
   FileText, 
+  Sparkles,
   Compass, 
   LogOut, 
   User as UserIcon,
@@ -62,6 +63,11 @@ export const Navbar: React.FC = () => {
               <NavLink to="/resume" className={navItemClass}>
                 <FileText className="w-4 h-4" />
                 <span>Resume Builder</span>
+              </NavLink>
+
+              <NavLink to="/resume-analyzer" className={navItemClass}>
+                <Sparkles className="w-4 h-4 text-indigo-500" />
+                <span>Resume Analyzer</span>
               </NavLink>
 
               <NavLink to="/practice" className={navItemClass}>

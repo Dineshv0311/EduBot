@@ -237,3 +237,47 @@ CREATE INDEX idx_coding_problem_slug ON coding_problem(slug);
 CREATE INDEX idx_coding_test_case_problem ON coding_test_case(problem_id);
 CREATE INDEX idx_coding_submission_user ON coding_submission(user_id);
 CREATE INDEX idx_coding_submission_problem ON coding_submission(problem_id);
+
+
+-- 20. RESUME_DOCUMENT (ATS Resume Analyzer uploaded student documents)
+CREATE TABLE resume_document (
+    document_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    file_name VARCHAR(255) NOT NULL,
+    file_type VARCHAR(100) NOT NULL,
+    file_size INT NOT NULL,
+    extracted_text TEXT NOT NULL,
+    parsed_data JSONB DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 21. RESUME_ANALYSIS (ATS Match Scoring & Recommendations)
+CREATE TABLE resume_analysis (
+    analysis_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    document_id INT REFERENCES resume_document(document_id) ON DELETE SET NULL,
+    target_company VARCHAR(255),
+    target_role VARCHAR(255) NOT NULL,
+    job_description TEXT,
+    analysis_mode VARCHAR(50) NOT NULL CHECK (analysis_mode IN ('role_company', 'job_description')),
+    overall_score INT NOT NULL,
+    job_match_score INT NOT NULL,
+    resume_quality_score INT NOT NULL,
+    keyword_coverage_score INT NOT NULL,
+    section_completeness_score INT NOT NULL,
+    readability_score INT NOT NULL,
+    scoring_breakdown JSONB NOT NULL DEFAULT '{}'::jsonb,
+    strengths JSONB NOT NULL DEFAULT '[]'::jsonb,
+    missing_skills JSONB NOT NULL DEFAULT '[]'::jsonb,
+    section_feedback JSONB NOT NULL DEFAULT '{}'::jsonb,
+    formatting_warnings JSONB NOT NULL DEFAULT '[]'::jsonb,
+    recommendations JSONB NOT NULL DEFAULT '[]'::jsonb,
+    rubric_version VARCHAR(20) DEFAULT '1.0',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_resume_document_user ON resume_document(user_id);
+CREATE INDEX idx_resume_analysis_user ON resume_analysis(user_id);
+CREATE INDEX idx_resume_analysis_doc ON resume_analysis(document_id);
+CREATE INDEX idx_resume_analysis_created ON resume_analysis(created_at DESC);
